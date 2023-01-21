@@ -1,0 +1,10 @@
+configfile: "config/config.yaml"
+
+include: "rules/common.smk"
+include: "rules/cutadapt.smk"
+include: "rules/star.smk"
+include: "rules/salmon.smk"
+
+rule all:
+    input:
+        expand("{out_}", out_ = outputs)
