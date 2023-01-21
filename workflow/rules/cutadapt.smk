@@ -1,3 +1,6 @@
+# TODO: Trimmed outputs gives error while aligning 
+# https://github.com/alexdobin/STAR/issues/1732
+
 rule trim_fq:
 	input:
 		get_fqs
