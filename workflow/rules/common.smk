@@ -56,6 +56,7 @@ def get_batches_1(wildcards):
 	if source:
 		return expand("sra-data/{srr}_1.fastq.gz", srr=reps)
 	else:
+		reps = units.loc[units["Name"] == name,"Fastq1"].tolist()
 		return reps
 	
 def get_batches_2(wildcards):
@@ -65,6 +66,7 @@ def get_batches_2(wildcards):
 	if source:
 		return expand("sra-data/{srr}_2.fastq.gz", srr=reps)
 	else:
+		reps = units.loc[units["Name"] == name,"Fastq2"].tolist()
 		return reps
 # <<< merge <<<
 

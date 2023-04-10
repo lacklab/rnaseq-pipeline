@@ -38,7 +38,7 @@ rule merge_fqs_1:
 			""")
 		else:
 			shell("""
-		    mv {input} {output}
+		    cp {input} {output}
 			""")
 
 rule merge_fqs_2:
@@ -55,5 +55,5 @@ rule merge_fqs_2:
 			""")
 		else:
 			shell("""
-		    mv {input} {output}
+		    cp {input} {output}
 			""")
