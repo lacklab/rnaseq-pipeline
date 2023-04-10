@@ -15,9 +15,9 @@ OUTPUT:
 REF:
     NAME: hg19
     FA: /groups/lackgrp/genomeAnnotations/hg19/hg19.fa
-    GTF: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.gtf
-    TFA: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.fa
-    STAR_IDX: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.star.idx
+    GTF: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.simple.gtf
+    TFA: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.simple.fa
+    STAR_IDX: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.simple.star.idx
     CHROM_SIZES: /groups/lackgrp/genomeAnnotations/hg19/hg19.chrom.sizes
 
 CUT_ADAPTERS: True

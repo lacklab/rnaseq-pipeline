@@ -1,7 +1,7 @@
 rule align:
 	input:
-		get_fqs
-		#get_trimmed_fqs
+		#get_fqs
+		get_trimmed_fqs
 	output:
 		"results_{ref}/star/{raw}Aligned.sortedByCoord.out.bam",
 		"results_{ref}/star/{raw}Aligned.toTranscriptome.out.bam"

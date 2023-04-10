@@ -6,6 +6,7 @@ config/units.tsv
 
 results_*/
 sra-data/
+merged-data/
 trimmed-data/
 raw-data/
 logs/
