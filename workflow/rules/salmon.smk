@@ -4,7 +4,7 @@ rule quant:
 	output:
 		"results_{ref}/salmon/{raw}/quant.sf"
 	params:
-		tfa = config["REF"]["TFA"]
+		tfa = config[f"REF_{ref}"]["TFA"]
 	threads:
 		64
 	shell:

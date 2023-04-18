@@ -6,8 +6,8 @@ rule align:
 		"results_{ref}/star/{raw}Aligned.sortedByCoord.out.bam",
 		"results_{ref}/star/{raw}Aligned.toTranscriptome.out.bam"
 	params:
-		idx = config["REF"]["STAR_IDX"],
-		gtf = config["REF"]["GTF"]
+		idx = config[f"REF_{ref}"]["STAR_IDX"],
+		gtf = config[f"REF_{ref}"]["GTF"]
 	threads:
 		64
 	shell:

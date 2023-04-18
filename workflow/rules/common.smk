@@ -10,7 +10,7 @@ samples = pd.read_table(config["SAMPLES"])
 units = pd.read_table(config["UNITS"])
 units["Raw"] = units["Name"] + "_" + units["Unit"].astype(str)
 
-ref = config["REF"]["NAME"]
+ref = config["OUTPUT"]["REF"]
 # >>> utils >>>
 def get_lib(wildcards):
 	return units.loc[units["Name"] == wildcards.raw, "Library"].unique()[0]

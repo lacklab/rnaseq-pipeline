@@ -3,14 +3,14 @@ In order to configure your analysis, make changes to `config.yaml`.
 # 1. `SAMPLES`
 A tab-separated file with the following example should be provided to specify the samples:
 
-| Name            | Conrol       |
-|-----------------|--------------|
-| AR_NKI_1_N      | -            |
-| AR_NKI_7_N      | -            |
-| LuCAP176nlAR    | LuCAP176nlIN |
-| LuCAP176nlFOXA1 | LuCAP176nlIN |
-| LuCAP176wzAR    | LuCAP176wzIN |
-| LuCAP176wzFOXA1 | LuCAP176wzIN |
+| Name             | Condition    |
+|------------------|--------------|
+| GSM6752476_Vh_1  | Vh           |
+| GSM6752477_Vh_2  | Vh           |
+| GSM6752478_Vh_3  | Vh           |
+| GSM6752479_Dht_1 | Dht          |
+| GSM6752480_Dht_2 | Dht          |
+| GSM6752481_Dht_3 | Dht          |
 
 Name: Sample name for IP experiment
 
@@ -21,16 +21,14 @@ A tab-separated file with the following example should be provided to specify th
 
 PS: SRR ID units will be fetched from SRA
 
-| Name             | Unit | Fastq1                                                         | Fastq2                                                         | Library     |
-|------------------|------|----------------------------------------------------------------|----------------------------------------------------------------|-------------|
-| AR_NKI_1_N       | 1    | SRR11856198                                                    | -                                                              | Single      |
-| AR_NKI_7_N       | 1    | SRR11856199                                                    | -                                                              | Single      |
-| LuCAP176nlAR     | 1    | raw-data/LuCAP176nlAR_CKDL220029757-1A_HLYT2DSX5_L2_1.fq.gz    | raw-data/LuCAP176nlAR_CKDL220029757-1A_HLYT2DSX5_L2_2.fq.gz    | Paired      |
-| LuCAP176nlFOXA1  | 1    | raw-data/LuCAP176nlFOXA1_CKDL220029753-1A_HLYT2DSX5_L2_1.fq.gz | raw-data/LuCAP176nlFOXA1_CKDL220029753-1A_HLYT2DSX5_L2_1.fq.gz | Paired      |
-| LuCAP176nlIN     | 1    | raw-data/LuCAP176nlIN_CKDL220029757-1A_HLYT2DSX5_L2_1.fq.gz    | raw-data/LuCAP176nlIN_CKDL220029757-1A_HLYT2DSX5_L2_2.fq.gz    | Paired      |
-| LuCAP176wzAR     | 1    | raw-data/LuCAP176wzAR_CKDL220029755-1A_HLYT2DSX5_L2_1.fq.gz    | raw-data/LuCAP176wzAR_CKDL220029755-1A_HLYT2DSX5_L2_2.fq.gz    | Paired      |
-| LuCAP176wzFOXA1  | 1    | raw-data/LuCAP176wzFOXA1_CKDL220029756-1A_HLYT2DSX5_L2_1.fq.gz | raw-data/LuCAP176wzFOXA1_CKDL220029756-1A_HLYT2DSX5_L2_2.fq.gz | Paired      |   
-| LuCAP176wzIN     | 1    | raw-data/LuCAP176wzIN_CKDL220029756-1A_HLYT2DSX5_L2_1.fq.gz    | raw-data/LuCAP176wzIN_CKDL220029756-1A_HLYT2DSX5_L2_2.fq.gz    | Paired      |
+| Name             | Unit | Fastq1                                                         | Fastq2                                                         | Library     | Dataset     |
+|------------------|------|----------------------------------------------------------------|----------------------------------------------------------------|-------------|-------------|
+| GSM6752476_Vh_1  | 1    | SRR22381692                                                    | -                                                              | Paired      | GSE218556   |
+| GSM6752477_Vh_2  | 1    | SRR22381691                                                    | -                                                              | Paired      | GSE218556   |
+| GSM6752478_Vh_3  | 1    | SRR22381690                                                    | -                                                              | Paired      | GSE218556   |
+| GSM6752479_Dht_1 | 1    | SRR22381689                                                    | -                                                              | Paired      | GSE218556   |
+| GSM6752480_Dht_2 | 1    | SRR22381688                                                    | -                                                              | Paired      | GSE218556   |
+| GSM6752481_Dht_3 | 1    | SRR22381687                                                    | -                                                              | Paired      | GSE218556   |
 
 Name: Sample name for processing the data (bam generation)
 
@@ -40,32 +38,34 @@ Fastq1: Path to the 1st FASTQ file
 
 Fastq2: Path to the 2nd FASTQ file
 
+Dataset: (optional but recommended): The unique dataset identifier.
+
 
 # 3. `OUTPUT`
+- `REF` : The reference genome to be analysed on.
 - `RUN`
     - `QC` : Decides if qc analysis will be performed. `True/False` 
-    - `PEAKS` : Decides if peak calling will be performed. `True/False` 
-    - `BWS` : Decides if bigwig files will be generated. `True/False` 
-- `BW_NORMALIZATIONS` : (If `BWS:True`) normalizes the bigwig files accordingly. `rawcounts/RPM`
-- `BAMPROCESS_PARAMS` : `samtools view` parameters to filter read accordingly. PS: This pipeline is uniqe reads and paired samples aware, thus `-f` and `-F` used builtin, but you can change MAPQ threshold.
-- `MACS_THRESHOLD` : The significancy treshold for `macs3 callpeak -q`.
+    - `QUANT` : Decides if salmon quantification will be performed. This path includes Trimming, STAR alignment and Salmon Quantification. `True/False` 
+- `Level` #TODO
+    - `Gene`
+    - `Transcript`
+
 
 ```
 OUTPUT:
+    REF: hg19  
     RUN:
         QC: False
-        PEAKS: True
-        BWS: True
-    BW_NORMALIZATIONS:
-        - rawcount
-    BAMPROCESS_PARAMS: -q 30
-    MACS_THRESHOLD: 0.01 
+        QUANT: TRUE
+    LEVEL:
+        - Gene
+        - Transcript
 ```
 
-# 4. `REF`
-   - `Name` : Name of the genome
-   - `FA`: Path to the FASTA file of the reference genome
-   - `BWA_IDX`: Path to the BWA index files (prefix)
-   - `CHROM_SIZES` : Path to the chrom.sizes file of the reference genome
+# 4. `REF_hg19` 
+- `FA` : Path to genome FASTA file.
+- `CHROM_SIZES` : Path to genome's chromosome sizes. 
+- `GTF` : Path to gene Annotation file. `GTF` is necessary. 
+- `TFA` : Path to transcript FASTA file. (You can create this from previous `GTF` with [gffread](http://ccb.jhu.edu/software/stringtie/gff.shtml).)
+- `STAR_IDX` : Path to STAR index. (Generate the STAR index using the files you put here.)
 
-  
