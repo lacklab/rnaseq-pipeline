@@ -2,13 +2,13 @@ SAMPLES: config/samples.tsv
 UNITS: config/units.tsv
 
 OUTPUT:
-    REF: hg19  
+    #REF: hg19  
     RUN:
         QC: False
         QUANT: TRUE      # Trim | Align | Quant     
     LEVEL:
         - Gene
-        - Transcript
+        #- Transcript
     # TODO: DEseq2 
     # REF_CONDITION: Vh
 

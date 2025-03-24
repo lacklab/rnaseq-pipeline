@@ -1,0 +1,9 @@
+name: rnaseq_trim
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python
+  - fastqc
+  - trim-galore

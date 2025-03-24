@@ -1,0 +1,7 @@
+
+
+hg38:
+    FA: /groups/lackgrp/genomeAnnotations/hg38/hg38.fa
+    GTF: /groups/lackgrp/genomeAnnotations/hg38/gencode.v47.basic.annotation.gtf
+    TFA: /groups/lackgrp/genomeAnnotations/hg38/gencode.v47.transcripts.cleaned.fa
+    CHROM_SIZES: /groups/lackgrp/genomeAnnotations/hg38/hg38.chrom.sizes

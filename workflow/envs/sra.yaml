@@ -1,0 +1,8 @@
+name: rnaseq-sra
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - sra-tools
+  - parallel-fastq-dump

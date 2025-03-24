@@ -1,0 +1,7 @@
+name: rnaseq_star
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - star

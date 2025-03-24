@@ -1,8 +1,9 @@
 configfile: "config/config.yaml"
 
-include: "rules/sra.smk"
 include: "rules/common.smk"
-include: "rules/cutadapt.smk"
+
+include: "rules/sra.smk"
+include: "rules/trim.smk"
 include: "rules/star.smk"
 include: "rules/salmon.smk"
 

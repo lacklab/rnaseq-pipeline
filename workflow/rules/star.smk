@@ -1,19 +1,48 @@
-rule align:
+rule star_index:
 	input:
-		#get_fqs
-		get_trimmed_fqs
+		genome_fasta=lambda wildcards: references[wildcards.ref]["FA"],
+		annotation_gtf=lambda wildcards: references[wildcards.ref]["GTF"],
+		transcript_fasta=lambda wildcards: references[wildcards.ref]["TFA"]
+	output:
+		directory("results_{ref}/star_index/")
+	params:
+		sjdbOverhang=99  # Ideally set to read length - 1
+	conda:
+		"../envs/star.yaml"
+	resources:
+		mem_mb=700000
+	threads: 
+		32
+	shell:
+		"""
+		STAR --limitGenomeGenerateRAM 500000000000\
+			--runMode genomeGenerate \
+			--runThreadN {threads} \
+			--genomeDir results_{wildcards.ref}/star_index/ \
+			--genomeFastaFiles {input.genome_fasta} {input.transcript_fasta} \
+			--sjdbGTFfile {input.annotation_gtf} \
+			--sjdbOverhang {params.sjdbOverhang}
+		"""
+
+rule star:
+	input:
+		trimmed_fq1="trimmed/{raw}_1.trimmed.fastq.gz",
+		trimmed_fq2="trimmed/{raw}_2.trimmed.fastq.gz",
+		prereq = "results_{ref}/star_index/"
 	output:
 		"results_{ref}/star/{raw}Aligned.sortedByCoord.out.bam",
 		"results_{ref}/star/{raw}Aligned.toTranscriptome.out.bam"
 	params:
-		idx = config[f"REF_{ref}"]["STAR_IDX"],
-		gtf = config[f"REF_{ref}"]["GTF"]
+		idx = lambda wildcards: f"results_{wildcards.ref}/star_index/",
+		gtf = lambda wildcards: references[wildcards.ref]["GTF"]
+	conda:
+		"../envs/star.yaml"
 	threads:
-		64
+		16
 	shell:
 		"""
 		STAR --genomeDir {params.idx} \
-			--readFilesIn {input} \
+			--readFilesIn {input.trimmed_fq1} {input.trimmed_fq2} \
 			--outFileNamePrefix results_{wildcards.ref}/star/{wildcards.raw} \
 			--readFilesCommand zcat \
 			--runThreadN {threads} \
@@ -36,8 +65,24 @@ rule align:
 			--outSAMattributes NH HI AS NM MD \
 			--outSAMtype BAM SortedByCoordinate \
 			--quantMode TranscriptomeSAM GeneCounts \
-			--quantTranscriptomeBan IndelSoftclipSingleend \
-			--limitBAMsortRAM 32000000000
+			--quantTranscriptomeSAMoutput BanSingleEnd_BanIndels_ExtendSoftclip \
+			--limitBAMsortRAM 300000000000
+		"""
+
+rule star_sort:
+	input:
+		"results_{ref}/star/{raw}Aligned.toTranscriptome.out.bam"
+	output:
+		"results_{ref}/star/{raw}Aligned.toTranscriptome.sorted.bam"
+	conda:
+		"../envs/samtools.yaml"
+	threads:
+		16
+	shell:
+		"""
+		samtools sort -@ {threads} -o {output} {input}
+
+		samtools index {output}
 		"""
 
 # https://ycl6.gitbook.io/guide-to-rna-seq-analysis/raw-read-processing/mapping/alignment-based-method
