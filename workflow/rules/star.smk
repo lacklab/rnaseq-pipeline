@@ -26,50 +26,65 @@ rule star_index:
 			--sjdbOverhang {params.sjdbOverhang}
 		"""
 
-rule star:
-	input:
-		trimmed_fq1="trimmed/{raw}_1.trimmed.fastq.gz",
-		trimmed_fq2="trimmed/{raw}_2.trimmed.fastq.gz",
-		prereq = "results_{ref}/star_index/"
-	output:
-		"results_{ref}/star/{raw}Aligned.sortedByCoord.out.bam",
-		"results_{ref}/star/{raw}Aligned.toTranscriptome.out.bam"
-	params:
-		idx = lambda wildcards: f"results_{wildcards.ref}/star_index/",
-		gtf = lambda wildcards: references[wildcards.ref]["GTF"]
-	conda:
-		"../envs/star.yaml"
-	threads:
-		16
-	shell:
-		"""
-		STAR --genomeDir {params.idx} \
-			--readFilesIn {input.trimmed_fq1} {input.trimmed_fq2} \
-			--outFileNamePrefix results_{wildcards.ref}/star/{wildcards.raw} \
-			--readFilesCommand zcat \
-			--runThreadN {threads} \
-			--genomeLoad NoSharedMemory \
-			--twopassMode Basic \
-			--sjdbGTFfile {params.gtf} \
-			--sjdbScore 2 \
-			--sjdbOverhang 99 \
-			--limitSjdbInsertNsj 1000000 \
-			--outFilterMultimapNmax 20 \
-			--alignSJoverhangMin 8 \
-			--alignSJDBoverhangMin 1 \
-			--outFilterMismatchNmax 999 \
-			--outFilterMismatchNoverReadLmax 0.04 \
-			--alignIntronMin 20 \
-			--alignIntronMax 1000000 \
-			--alignMatesGapMax 1000000 \
-			--outSAMunmapped Within \
-			--outFilterType BySJout \
-			--outSAMattributes NH HI AS NM MD \
-			--outSAMtype BAM SortedByCoordinate \
-			--quantMode TranscriptomeSAM GeneCounts \
-			--quantTranscriptomeSAMoutput BanSingleEnd_BanIndels_ExtendSoftclip \
-			--limitBAMsortRAM 300000000000
-		"""
+rule map_star:
+    input:
+        trimmed_fq1 = "trimmed/{raw}_1.trimmed.fastq.gz",
+        trimmed_fq2 = "trimmed/{raw}_2.trimmed.fastq.gz",   # ignored for SE runs
+        prereq      = "results_{ref}/star_index/"
+    output:
+        bam   = "results_{ref}/star/{raw}Aligned.sortedByCoord.out.bam",
+        t_bam = "results_{ref}/star/{raw}Aligned.toTranscriptome.out.bam"
+    params:
+        idx  = lambda wc: f"results_{wc.ref}/star_index/",
+        gtf  = lambda wc: references[wc.ref]['GTF'],
+        lib  = lambda wc: get_lib(wc)           # must return 'Single' or 'Paired'
+    conda:
+        "../envs/star.yaml"
+    threads: 16
+    shell:
+        r"""
+        if [[ "{params.lib}" == "Single" ]]; then
+            STAR --genomeDir {params.idx} \
+                 --readFilesIn {input.trimmed_fq1} \
+                 --readFilesCommand zcat \
+                 --runThreadN {threads} \
+                 --genomeLoad NoSharedMemory \
+                 --twopassMode Basic \
+                 --sjdbGTFfile {params.gtf} \
+                 --sjdbScore 2 --sjdbOverhang 99 --limitSjdbInsertNsj 1000000 \
+                 --outFilterMultimapNmax 20 --alignSJoverhangMin 8 \
+                 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 999 \
+                 --outFilterMismatchNoverReadLmax 0.04 --alignIntronMin 20 \
+                 --alignIntronMax 1000000 --alignMatesGapMax 1000000 \
+                 --outSAMunmapped Within --outFilterType BySJout \
+                 --outSAMattributes NH HI AS NM MD \
+                 --outSAMtype BAM SortedByCoordinate \
+                 --quantMode TranscriptomeSAM GeneCounts \
+                 --quantTranscriptomeSAMoutput BanSingleEnd_BanIndels_ExtendSoftclip \
+                 --limitBAMsortRAM 300000000000 \
+                 --outFileNamePrefix results_{wildcards.ref}/star/{wildcards.raw}
+        elif [[ "{params.lib}" == "Paired" ]]; then
+            STAR --genomeDir {params.idx} \
+                 --readFilesIn {input.trimmed_fq1} {input.trimmed_fq2} \
+                 --readFilesCommand zcat \
+                 --runThreadN {threads} \
+                 --genomeLoad NoSharedMemory \
+                 --twopassMode Basic \
+                 --sjdbGTFfile {params.gtf} \
+                 --sjdbScore 2 --sjdbOverhang 99 --limitSjdbInsertNsj 1000000 \
+                 --outFilterMultimapNmax 20 --alignSJoverhangMin 8 \
+                 --alignSJDBoverhangMin 1 --outFilterMismatchNmax 999 \
+                 --outFilterMismatchNoverReadLmax 0.04 --alignIntronMin 20 \
+                 --alignIntronMax 1000000 --alignMatesGapMax 1000000 \
+                 --outSAMunmapped Within --outFilterType BySJout \
+                 --outSAMattributes NH HI AS NM MD \
+                 --outSAMtype BAM SortedByCoordinate \
+                 --quantMode TranscriptomeSAM GeneCounts \
+                 --quantTranscriptomeSAMoutput BanSingleEnd_BanIndels_ExtendSoftclip \
+                 --limitBAMsortRAM 300000000000 \
+                 --outFileNamePrefix results_{wildcards.ref}/star/{wildcards.raw}
+        fi
+        """
 
 rule star_sort:
 	input:

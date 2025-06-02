@@ -5,3 +5,9 @@ hg38:
     GTF: /groups/lackgrp/genomeAnnotations/hg38/gencode.v47.basic.annotation.gtf
     TFA: /groups/lackgrp/genomeAnnotations/hg38/gencode.v47.transcripts.cleaned.fa
     CHROM_SIZES: /groups/lackgrp/genomeAnnotations/hg38/hg38.chrom.sizes
+
+hg19:
+    FA: /groups/lackgrp/genomeAnnotations/hg19/hg19.fa
+    GTF: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.simple.gtf
+    TFA: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.simple.fa
+    CHROM_SIZES: /groups/lackgrp/genomeAnnotations/hg19/hg19.chrom.sizes

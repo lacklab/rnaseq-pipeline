@@ -12,13 +12,3 @@ OUTPUT:
     # TODO: DEseq2 
     # REF_CONDITION: Vh
 
-REF_hg19:
-    FA: /groups/lackgrp/genomeAnnotations/hg19/hg19.fa
-    GTF: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.simple.gtf
-    TFA: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.simple.fa
-    STAR_IDX: /groups/lackgrp/genomeAnnotations/hg19/hg19.ncbiRefSeq.simple.star.idx
-    CHROM_SIZES: /groups/lackgrp/genomeAnnotations/hg19/hg19.chrom.sizes
-
-CUT_ADAPTERS: True
-ADAPTER_FWD: CTGTCTCTTATA
-ADAPTER_REV: CTGTCTCTTATA
