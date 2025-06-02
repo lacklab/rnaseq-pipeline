@@ -10,7 +10,9 @@ rule star_index:
 	conda:
 		"../envs/star.yaml"
 	resources:
-		mem_mb=700000
+		mem_mb=700000,
+		partition='long,big-mem',
+		runtime=144000
 	threads: 
 		32
 	shell:

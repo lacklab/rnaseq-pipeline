@@ -9,3 +9,5 @@ raw-data/
 link/
 trimmed/
 qc/
+
+slurm_logs
